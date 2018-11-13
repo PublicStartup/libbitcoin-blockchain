@@ -47,6 +47,10 @@ void populate_header::populate(header_branch::ptr branch,
 
     const auto& header = *branch->top();
 
+            LOG_VERBOSE(LOG_BLOCKCHAIN)
+            << " *branch->top() header: "
+            << encode_base16(header.to_data(message::version::level::canonical));
+
     // This is only needed for duplicate or stored error.
     fast_chain_.populate_header(header);
 

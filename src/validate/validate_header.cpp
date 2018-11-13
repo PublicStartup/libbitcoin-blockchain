@@ -105,6 +105,9 @@ void validate_header::handle_populated(const code& ec,
 
     const auto& header = *branch->top();
 
+            LOG_VERBOSE(LOG_BLOCKCHAIN)
+            << " validate_header::handle_populated() header: " << encode_base16(header.to_data(message::version::level::canonical));
+
     // Skip validation if full block was validated (is valid at this point).
     if (header.metadata.validated)
     {
@@ -114,8 +117,14 @@ void validate_header::handle_populated(const code& ec,
 
     BITCOIN_ASSERT(header.metadata.state);
 
+            auto accept_result = header.accept();
+
+        LOG_VERBOSE(LOG_BLOCKCHAIN)
+        << " validate_header::handle_populated() called header.accept()"
+        << " accept_result = " << accept_result;
+
     // Run contextual header checks.
-    handler(header.accept());
+    handler(accept_result);
 }
 
 } // namespace blockchain
